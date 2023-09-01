@@ -44,6 +44,8 @@ export default class App extends Component {
     handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        if(!this.state.value) return;
+
         let newTodoData = {
             id: Date.now(),
             title: this.state.value,
