@@ -13,10 +13,10 @@ export default class App extends Component {
             {
                 id: 2,
                 title: "Cleaning",
-              completed: false
+                completed: false
             }
         ],
-      value: ""
+        value: ""
     }
 
     removeTodo = (id: Number) => {
@@ -24,35 +24,35 @@ export default class App extends Component {
     }
 
     handleKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
-      this.setState({value: e.target.value})
+        this.setState({value: e.target.value})
     }
 
     handleCheck = (id: Number) => {
 
-      let newTodoData = this.state.todoData.map((data) => {
-        if (data.id === id) {
-          data.completed = !data.completed
-        }
-        return data
-      });
+        let newTodoData = this.state.todoData.map((data) => {
+            if (data.id === id) {
+                data.completed = !data.completed
+            }
+            return data
+        });
 
-      this.setState({todoData : newTodoData})
+        this.setState({todoData: newTodoData})
 
-      console.log("array", this.state.todoData)
+        console.log("array", this.state.todoData)
     }
 
     handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      let newTodoData = {
-        id: Date.now(),
-        title: this.state.value,
-        completed: false
-      }
-      this.setState({
-        todoData: [...this.state.todoData, newTodoData],
-        value: ""
-      })
+        let newTodoData = {
+            id: Date.now(),
+            title: this.state.value,
+            completed: false
+        }
+        this.setState({
+            todoData: [...this.state.todoData, newTodoData],
+            value: ""
+        })
     }
 
     render() {
@@ -69,18 +69,19 @@ export default class App extends Component {
                             value={this.state.value}
                             onChange={this.handleKeyword}
                         />
-                      <TodoSubmit
-                        type={"submit"}
-                        value={"Input"}
+                        <TodoSubmit
+                            type={"submit"}
+                            value={"Input"}
 
-                      />
+                        />
                     </TodoForm>
 
                     {this.state.todoData.map(data => (
                         <ListItem key={data.id} completed={data.completed}>
                             <label>
-                              <input type="checkbox" defaultChecked={data.completed} onChange={() => this.handleCheck(data.id)}/>
-                              {data.title}
+                                <input type="checkbox" defaultChecked={data.completed}
+                                       onChange={() => this.handleCheck(data.id)}/>
+                                {data.title}
                             </label>
                             <RemoveTodo onClick={() => this.removeTodo(data.id)}>x</RemoveTodo>
                         </ListItem>
@@ -116,6 +117,7 @@ const TodoForm = styled.form`
   ${TodoInput} {
     flex: 10;
   }
+
   ${TodoSubmit} {
     flex: 1;
   }
@@ -124,7 +126,7 @@ const TodoForm = styled.form`
 
 const Title = styled.h1``;
 
-const ListItem = styled.div<{completed: boolean}>`
+const ListItem = styled.div<{ completed: boolean }>`
   padding: 10px;
   border-bottom: 1px #ccc dotted;
   text-decoration: ${props => props.completed ? 'line-through' : 'none'};
