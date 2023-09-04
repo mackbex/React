@@ -87,17 +87,38 @@ export default function App() {
 }
 
 const Container = styled.div`
-  margin: auto;
-  max-width: 600px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  
+  background-color: #DBEAFE;
 `;
 
 const TodoBlock = styled.div`
-  padding: 30px;
-  margin-top: 50px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: -9px 17px 13px rgb(0 0 0 /16%);
+  padding: 1.5rem;
+  margin: 1rem;
+  border-radius: 0.25rem;
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
+
+
+  @media (min-width: 1024px) {
+    width: 75%;
+  }
+  @media (min-width: 1024px) {
+    max-width: 32rem;
+  }
+
 `;
 
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  display: flex;
+  margin-bottom: 0.75rem;
+  justify-content: space-between;
+`;

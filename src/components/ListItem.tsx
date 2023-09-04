@@ -21,16 +21,22 @@ export default function ListItem({todoData, removeTodo, handleCheck}: Props) {
 }
 
 const TodoItem = styled.div<{ completed: boolean }>`
-  padding: 10px;
-  border-bottom: 1px #ccc dotted;
+  display: flex;
+  padding: 0.25rem 1rem;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  color: #4B5563;
+  background-color: #F3F4F6;
   text-decoration: ${props => props.completed ? 'line-through' : 'none'};
 `;
 
 const RemoveTodo = styled.button`
-  color: #fff;
-  border: none;
-  padding: 5px 9px;
-  border-radius: 50%;
-  cursor: pointer;
   float: right;
+  padding: 0.5rem 1rem;
+  border: 0;
 `;
