@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import ListItem from "./components/ListItem";
-
-
+import Form from "./components/Form";
 
 export interface PropsTodoData {
     id: number,
@@ -12,7 +11,7 @@ export interface PropsTodoData {
 
 export default function App() {
 
-    const [todoData, setTodoData] = useState<PropsTodoData[]>([
+    const [todoList, setTodoList] = useState<PropsTodoData[]>([
         {
             id: 1,
             title: "Study",
@@ -24,39 +23,41 @@ export default function App() {
             completed: false
         }
     ])
+
     const [title, setTitle] = useState("")
 
     const removeTodo = (id: Number) => {
-        setTodoData(todoData.filter((data) => data.id !== id))
+        setTodoList(todoList.filter((data) => data.id !== id))
     }
 
-    const handleKeyword = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.target.value)
-    }
 
     const handleCheck = (id: Number) => {
-        let newTodoData = todoData.map((data) => {
+        let newTodoData = todoList.map((data) => {
             if (data.id === id) {
                 data.completed = !data.completed
             }
             return data
         });
 
-        setTodoData(newTodoData)
-        console.log("array", todoData)
+        setTodoList(newTodoData)
+        console.log("array", todoList)
+    }
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.target.value)
     }
 
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if(!title) return;
+        if (!title) return;
 
         let newTodoData = {
             id: Date.now(),
             title: title,
             completed: false
         }
-        setTodoData(prev =>
+        setTodoList(prev =>
             [...prev, newTodoData]
         );
         setTitle("")
@@ -67,21 +68,13 @@ export default function App() {
             <TodoBlock>
                 <Title>Todo List</Title>
 
-                <TodoForm onSubmit={handleSubmit}>
-                    <TodoInput
-                        type="text"
-                        name="value"
-                        placeholder="input todo"
-                        value={title}
-                        onChange={handleKeyword}
-                    />
-                    <TodoSubmit
-                        type={"submit"}
-                        value={"Input"}
-                    />
-                </TodoForm>
+                <Form
+                    title={title}
+                    onSubmit={handleSubmit}
+                    handleTitleChange={handleTitleChange}
+                />
 
-                {todoData.map(data => (
+                {todoList.map(data => (
                     <ListItem
                         todoData={data}
                         removeTodo={removeTodo}
@@ -106,22 +99,5 @@ const TodoBlock = styled.div`
   box-shadow: -9px 17px 13px rgb(0 0 0 /16%);
 `;
 
-const TodoInput = styled.input`
-  padding: 5px;
-`;
-
-const TodoSubmit = styled.input``;
-
-const TodoForm = styled.form`
-  display: flex;
-
-  ${TodoInput} {
-    flex: 10;
-  }
-
-  ${TodoSubmit} {
-    flex: 1;
-  }
-`;
 
 const Title = styled.h1``;

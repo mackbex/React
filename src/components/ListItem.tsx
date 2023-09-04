@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import {PropsTodoData} from "../App";
 
-export interface PropsListItem {
+interface Props {
     todoData: PropsTodoData,
     removeTodo: (id: Number) => void,
     handleCheck: (id: Number) => void
 }
 
-export default function ListItem({ todoData, removeTodo, handleCheck }: PropsListItem) {
-
+export default function ListItem({todoData, removeTodo, handleCheck}: Props) {
     return (
         <TodoItem key={todoData.id} completed={todoData.completed}>
             <label>
