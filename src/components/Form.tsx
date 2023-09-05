@@ -10,6 +10,7 @@ interface Props {
 
 export default function Form({onSubmit, title, handleTitleChange}: Props) {
 
+    console.log("form")
     return (
         <TodoForm onSubmit={onSubmit}>
             <TodoInput

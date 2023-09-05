@@ -1,17 +1,24 @@
+import React, {memo} from "react";
 import styled from "styled-components";
 import {PropsTodoData} from "../App";
+import {DraggableProvided} from "react-beautiful-dnd";
 
 interface Props {
+    provided: DraggableProvided | null,
     todoData: PropsTodoData,
     removeTodo: (id: Number) => void,
     handleCheck: (id: Number) => void,
     isDragging: boolean
 }
 
-export default function ListItem({todoData, removeTodo, handleCheck, isDragging}: Props) {
+function ListItem({provided, todoData, removeTodo, handleCheck, isDragging}: Props) {
+    console.log("item")
     return (
-
-        <ItemDiv>
+        <ItemDiv
+            ref={provided?.innerRef}
+            {...provided?.draggableProps}
+            {...provided?.dragHandleProps}
+        >
         <TodoItem key={todoData.id} $completed={todoData.completed} $isDragging={isDragging}>
             <label>
                 <input type="checkbox" defaultChecked={todoData.completed}
@@ -24,6 +31,8 @@ export default function ListItem({todoData, removeTodo, handleCheck, isDragging}
         </ItemDiv>
     );
 }
+
+export default memo(ListItem)
 
 const TodoItem = styled.div<{ $completed: boolean, $isDragging: boolean }>`
   display: flex;

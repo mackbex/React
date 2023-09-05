@@ -4,6 +4,7 @@ import ListItem from "./components/ListItem";
 import Form from "./components/Form";
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 import {StrictModeDroppable} from "./components/StrictModeDroppable";
+import List from "./components/List";
 
 export interface PropsTodoData {
     id: number,
@@ -12,6 +13,7 @@ export interface PropsTodoData {
 }
 
 export default function App() {
+    console.log("app")
 
     const [todoList, setTodoList] = useState<PropsTodoData[]>([
         {
@@ -65,19 +67,6 @@ export default function App() {
         setTitle("")
     }
 
-    const onDragStart = () => {}
-    const onDragEnd = (result: DropResult) => {
-        if(!result.destination) return;
-
-        const newTodoData = todoList;
-
-        const [reordered] = newTodoData.splice(result.source.index, 1);
-
-        newTodoData.splice(result.destination.index, 0, reordered);
-        setTodoList(newTodoData);
-
-    }
-
     return (
         <Container>
             <TodoBlock>
@@ -89,43 +78,13 @@ export default function App() {
                     handleTitleChange={handleTitleChange}
                 />
 
-                <DragDropContext
-                    onDragStart={onDragStart}
-                    onDragEnd={onDragEnd}>
-                    <StrictModeDroppable droppableId={"to-dos"}>
-                        {(provided) => (
-                            <div {...provided.droppableProps} ref={provided.innerRef}>
+                <List
+                    todoList={todoList}
+                    setTodoList={setTodoList}
+                    handleCheck={handleCheck}
+                    removeTodo={removeTodo}
+                />
 
-                                {todoList.map((data, index) => (
-                                <Draggable
-                                    key={data.id}
-                                    draggableId={data.id.toString()}
-                                    index={index}>
-                                    {(provided, snapshot) => (
-
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                        >
-                                            <ListItem
-                                                todoData={data}
-                                                removeTodo={removeTodo}
-                                                handleCheck={handleCheck}
-                                                isDragging={snapshot.isDragging}
-                                            />
-
-                                        </div>
-
-
-                                    )}
-                                </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </StrictModeDroppable>
-                </DragDropContext>
             </TodoBlock>
         </Container>
     )
