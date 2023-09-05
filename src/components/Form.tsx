@@ -1,7 +1,5 @@
 import React, {ChangeEventHandler} from 'react';
 import styled from "styled-components";
-import {PropsTodoData} from "../App";
-
 interface Props {
     title: string,
     onSubmit: (e: React.ChangeEvent<HTMLFormElement>) => void,
@@ -10,8 +8,8 @@ interface Props {
 
 export default function Form({onSubmit, title, handleTitleChange}: Props) {
 
-    console.log("form")
     return (
+
         <TodoForm onSubmit={onSubmit}>
             <TodoInput
                 type="text"

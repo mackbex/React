@@ -1,9 +1,7 @@
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import styled from "styled-components";
-import ListItem from "./components/ListItem";
 import Form from "./components/Form";
-import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
-import {StrictModeDroppable} from "./components/StrictModeDroppable";
+import { DropResult} from "react-beautiful-dnd";
 import List from "./components/List";
 
 export interface PropsTodoData {
@@ -13,8 +11,8 @@ export interface PropsTodoData {
 }
 
 export default function App() {
-    console.log("app")
 
+    console.log("app")
     const [todoList, setTodoList] = useState<PropsTodoData[]>([
         {
             id: 1,
@@ -30,25 +28,12 @@ export default function App() {
 
     const [title, setTitle] = useState("")
 
-    const removeTodo = (id: Number) => {
-        setTodoList(todoList.filter((data) => data.id !== id))
-    }
-
-
-    const handleCheck = (id: Number) => {
-        let newTodoData = todoList.map((data) => {
-            if (data.id === id) {
-                data.completed = !data.completed
-            }
-            return data
-        });
-
-        setTodoList(newTodoData)
-        console.log("array", todoList)
-    }
-
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
+    }
+
+    const handleRemoveAll = () => {
+        setTodoList([])
     }
 
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -67,10 +52,46 @@ export default function App() {
         setTitle("")
     }
 
+    const removeTodo = useCallback((id: Number) => {
+        setTodoList(todoList.filter((data) => data.id !== id))
+    },[todoList])
+
+    const handleCheck = useCallback((id: Number) => {
+        let newTodoData = todoList.map((data) => {
+            if (data.id === id) {
+                data.completed = !data.completed
+            }
+            return data
+        });
+
+        setTodoList(newTodoData)
+        console.log("array", todoList)
+    },[todoList])
+
+    const onDragStart = useCallback(() => {
+
+    },[])
+
+    const onDragEnd = useCallback((result: DropResult) => {
+        if(!result.destination) return;
+
+        const newTodoData = todoList;
+
+        const [reordered] = newTodoData.splice(result.source.index, 1);
+
+        newTodoData.splice(result.destination.index, 0, reordered);
+        setTodoList(newTodoData);
+    },[todoList])
+
     return (
         <Container>
             <TodoBlock>
-                <Title>Todo List</Title>
+                <TitleBlock>
+                    <Title>Todo List</Title>
+                    <ClearList
+                        onClick={handleRemoveAll}
+                    >clear</ClearList>
+                </TitleBlock>
 
                 <Form
                     title={title}
@@ -80,9 +101,10 @@ export default function App() {
 
                 <List
                     todoList={todoList}
-                    setTodoList={setTodoList}
-                    handleCheck={handleCheck}
                     removeTodo={removeTodo}
+                    handleCheck={handleCheck}
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
                 />
 
             </TodoBlock>
@@ -97,8 +119,12 @@ const Container = styled.div`
   justify-content: center;
   width: 100vw;
   height: 100vh;
-  
   background-color: #DBEAFE;
+`;
+
+const TitleBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const TodoBlock = styled.div`
@@ -121,4 +147,12 @@ const Title = styled.h1`
   display: flex;
   margin-bottom: 0.75rem;
   justify-content: space-between;
+`;
+
+const ClearList = styled.button`
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
+  
 `;

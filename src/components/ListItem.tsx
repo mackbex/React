@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, {memo, useMemo} from "react";
 import styled from "styled-components";
 import {PropsTodoData} from "../App";
 import {DraggableProvided} from "react-beautiful-dnd";
@@ -12,7 +12,10 @@ interface Props {
 }
 
 function ListItem({provided, todoData, removeTodo, handleCheck, isDragging}: Props) {
-    console.log("item")
+
+    const title = useMemo(() => {
+        return todoData.title
+    }, [todoData.title])
     return (
         <ItemDiv
             ref={provided?.innerRef}
@@ -23,7 +26,7 @@ function ListItem({provided, todoData, removeTodo, handleCheck, isDragging}: Pro
             <label>
                 <input type="checkbox" defaultChecked={todoData.completed}
                        onChange={() => handleCheck(todoData.id)}/>
-                {todoData.title}
+                {title}
             </label>
             <RemoveTodo onClick={() => removeTodo(todoData.id)}>x</RemoveTodo>
 
