@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import Form from "./components/Form";
 import { DropResult} from "react-beautiful-dnd";
@@ -13,20 +13,23 @@ export interface PropsTodoData {
 export default function App() {
 
     console.log("app")
-    const [todoList, setTodoList] = useState<PropsTodoData[]>([
-        {
-            id: 1,
-            title: "Study",
-            completed: true
-        },
-        {
-            id: 2,
-            title: "Cleaning",
-            completed: false
-        }
-    ])
+
+    const [todoList, setTodoList] = useState<PropsTodoData[]>(() => {
+        const lcTodo = localStorage.getItem("todo")
+        return lcTodo ? JSON.parse(lcTodo) : []
+    })
 
     const [title, setTitle] = useState("")
+
+    const isFirstRun = useRef(true);
+    useEffect(() => {
+        if(isFirstRun.current) {
+            isFirstRun.current = false
+            return;
+        }
+        localStorage.setItem("todo",JSON.stringify(todoList))
+
+    }, [todoList])
 
     const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value)
@@ -49,6 +52,7 @@ export default function App() {
         setTodoList(prev =>
             [...prev, newTodoData]
         );
+
         setTitle("")
     }
 
@@ -68,6 +72,18 @@ export default function App() {
         console.log("array", todoList)
     },[todoList])
 
+    const handleEditTodo = useCallback((id: Number, title: string) => {
+        let newTodoData = todoList.map((data) => {
+            if (data.id === id) {
+                data.title = title
+            }
+            return data
+        });
+
+        setTodoList(newTodoData)
+
+    }, [todoList])
+
     const onDragStart = useCallback(() => {
 
     },[])
@@ -81,7 +97,7 @@ export default function App() {
 
         newTodoData.splice(result.destination.index, 0, reordered);
         setTodoList(newTodoData);
-    },[todoList])
+     },[todoList])
 
     return (
         <Container>
@@ -105,6 +121,7 @@ export default function App() {
                     handleCheck={handleCheck}
                     onDragStart={onDragStart}
                     onDragEnd={onDragEnd}
+                    onEditDone={handleEditTodo}
                 />
 
             </TodoBlock>

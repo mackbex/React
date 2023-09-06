@@ -9,10 +9,11 @@ interface Props {
     removeTodo: (id: Number) => void,
     handleCheck: (id: Number) => void,
     onDragStart: OnDragStartResponder,
-    onDragEnd: OnDragEndResponder
+    onDragEnd: OnDragEndResponder,
+    onEditDone: (id: Number, title: string) => void
 }
 
-function List({todoList, removeTodo, handleCheck, onDragStart, onDragEnd}: Props) {
+function List({todoList, removeTodo, handleCheck, onDragStart, onDragEnd, onEditDone}: Props) {
 
     return(
         <DragDropContext
@@ -35,6 +36,7 @@ function List({todoList, removeTodo, handleCheck, onDragStart, onDragEnd}: Props
                                         removeTodo={removeTodo}
                                         handleCheck={handleCheck}
                                         isDragging={snapshot.isDragging}
+                                        onEditDone={onEditDone}
                                     />
                                 )}
                             </Draggable>
