@@ -9,8 +9,31 @@ export interface Movie {
     original_name: string,
     overview: string,
     backdrop_path: string,
+    media_type: string,
+    poster_path: string,
+    release_date: "",
+    first_air_date: "",
+    vote_average: number,
+    id: number,
     videos: {
         results: Videos[]
+    }
+}
+
+export const initialMovieState = (): Movie => {
+    return {
+        backdrop_path: "",
+        media_type: "",
+        id: 0,
+        name: "",
+        original_name: "",
+        overview: "",
+        poster_path: "",
+        title: "",
+        release_date: "",
+        first_air_date: "",
+        vote_average: 0,
+        videos: {results: []}
     }
 }
 
@@ -40,7 +63,7 @@ export default function Banner() {
             params: {append_to_response: "videos"},
         })
 
-        console.log(movieDetail)
+        console.log("detail : " + movieDetail)
         setMovie(movieDetail)
     }
 

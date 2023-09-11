@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from "../api/axios";
-import styled from "styled-components";
 import "./Row.css"
+import MovieModal from "./MovieModal";
+import {initialMovieState, Movie} from "./Banner";
 
 interface RowData {
     title: string,
@@ -10,26 +11,25 @@ interface RowData {
     isLargeRow?: boolean
 }
 
-interface Movie {
-    title: string,
-    poster_path: string,
-    backdrop_path: string,
-    id: number
-}
 
 export default function Row({title, id, fetchUrl, isLargeRow = false}: RowData) {
 
     const [movies, setMovies] = useState<Movie[]>([])
+    const [modelOpen, setModalOpen] = useState(false)
+    const [movieSelected, setMovieSelected] = useState<Movie>(initialMovieState)
 
     useEffect(() => {
         fetchMovieData()
     }, []);
 
     const fetchMovieData = async () => {
-        const request = await axios.get(fetchUrl, {
-            // headers: {Authorization: `Bearer ${axios.to}`}
-        })
+        const request = await axios.get(fetchUrl)
         setMovies(request.data.results)
+    }
+
+    const handleClick = (movie: Movie) => {
+        setModalOpen(true)
+        setMovieSelected(movie)
     }
 
     return (
@@ -51,6 +51,7 @@ export default function Row({title, id, fetchUrl, isLargeRow = false}: RowData) 
                             src={`https://image.tmdb.org/t/p/original/${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
                             loading={"lazy"}
                             alt={movie.title}
+                            onClick={() => { handleClick(movie)}}
                         />
                     ))}
                 </div>
@@ -66,6 +67,12 @@ export default function Row({title, id, fetchUrl, isLargeRow = false}: RowData) 
                 </span>
                 </div>
             </div>
+            {modelOpen &&
+                <MovieModal
+                    {...movieSelected}
+                    setModalOpen={setModalOpen}
+                />
+            }
         </section>
     );
 }
