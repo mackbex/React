@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import axios from "../../api/axios";
 import {Movie} from "../../components/Banner";
 import "./index.css"
@@ -14,6 +14,7 @@ export default function Search() {
     let query = useQuery();
     const searchTerm = useDebounce(query.get("q"), 500)
     const [searchResults, setSearchResults] = useState<Movie[]>([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         if(searchTerm) {
@@ -46,7 +47,7 @@ export default function Search() {
                         return (
                             <div className="movie" key={movie.id}>
                                 <div
-                                    // onClick={() => navigate(`/${movie.id}`)}
+                                    onClick={() => navigate(`/${movie.id}`)}
                                     className="movie__column-poster"
                                 >
                                     <img

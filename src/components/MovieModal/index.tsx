@@ -1,16 +1,23 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Movie} from "../Banner";
 import "./MovieModal.css"
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 
 interface MovieModalProp extends Movie{
     setModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function MovieModal(modal: MovieModalProp) {
+
+
+    const ref = useRef<HTMLDivElement>(null)
+
+    useOnClickOutside(ref, () => { modal.setModalOpen(false) })
+
     return (
         <div className="presentation">
             <div className="wrapper-modal">
-                <div className="modal">
+                <div className="modal" ref={ref}>
           <span onClick={() => modal.setModalOpen(false)} className="modal-close">
             X
           </span>

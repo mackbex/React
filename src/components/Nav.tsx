@@ -28,7 +28,7 @@ export default function Nav() {
             <Logo
                 alt={'Netflix logo'}
                 src={require("../assets/logo.png")}
-                onClick={() => window.location.reload()}
+                onClick={() => navigate("/")}
             />
 
             <Search
