@@ -3,6 +3,7 @@ import {useLocation} from "react-router-dom";
 import axios from "../../api/axios";
 import {Movie} from "../../components/Banner";
 import "./index.css"
+import useDebounce from "../../hooks/useDebounce";
 
 export default function Search() {
 
@@ -11,11 +12,12 @@ export default function Search() {
     }
 
     let query = useQuery();
-    const searchTerm = query.get("q")
+    const searchTerm = useDebounce(query.get("q"), 500)
     const [searchResults, setSearchResults] = useState<Movie[]>([])
 
     useEffect(() => {
         if(searchTerm) {
+            console.log("start")
             fetchSearchMovie(searchTerm)
         }
     }, [searchTerm]);
