@@ -1,38 +1,42 @@
-import Nav from "./components/Nav";
-import React from "react";
-import Footer from "./components/Footer";
-import {Outlet, Route, Routes} from "react-router-dom";
+import React, {useState} from "react";
 import styled from "styled-components";
-import Main from "./pages/Main";
-import Search from "./pages/Search";
-import Detail from "./pages/Detail";
+import {Simulate} from "react-dom/test-utils";
+import ended = Simulate.ended;
 
-const Layout = () => {
+
+const App = () => {
+
+    const [count, setCount] = useState(0)
+    const [disabled, setDisabled] = useState(false)
     return(
-        <div>
-            <Nav />
-            <Outlet />
-            <Footer />
+        <div className={"App"}>
+            <header className={"App-header"}>
+                <h3 data-testid={"counter"}>{count}</h3>
+            </header>
+            <div>
+                <button
+                    data-testid={"minus-btn"}
+                    onClick={() => { setCount((prev) => prev - 1) }}
+                    disabled={disabled}
+                >-</button>
+                <button
+                    data-testid={"plus-btn"}
+                    onClick={() => { setCount((prev) => prev + 1) }}
+                    disabled={disabled}
+                >+</button>
+            </div>
+            <OnOffBtn
+                data-testid={"on/off-btn"}
+                onClick={() => {
+                    setDisabled((prev) => !prev)
+                }}
+            >on/off</OnOffBtn>
         </div>
     )
 }
 
-const App = () => {
-    return(
-        <AppContainer>
-            <Routes>
-                <Route path={"/"} element={<Layout />} >
-                    <Route index element={<Main />}  />
-                    <Route path={":movieId"} element={<Detail />}  />
-                    <Route path={"search"} element={<Search />}  />
-                </Route>
-            </Routes>
-        </AppContainer>
-    )
-}
+export const OnOffBtn = styled.button`
+  background-color: blue;
+`
 
 export default App
-
-const AppContainer = styled.div`
-  background: #111;
-`
