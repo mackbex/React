@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`button control on/off button has blue color 1`] = `
+<button
+  className="sc-bcPKhP KXEJU"
+/>
+`;
