@@ -23,6 +23,7 @@
     "web-vitals": "^3.4.0"
   },
   "scripts": {
+    "build-if-present": "if [ -n \"$npm_package_scripts_build\" ]; then yarn run build; fi",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
