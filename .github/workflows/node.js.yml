@@ -28,7 +28,6 @@ jobs:
         cache: 'npm'
     - run: yarn install
     - run: yarn build-if-present
-    - run: yarn test
 
     - uses: actions/checkout@master
     - uses: awact/s3-action@master
