@@ -1,10 +1,29 @@
 import Head from 'next/head'
 import {Inter} from 'next/font/google'
 import styled from "styled-components";
+import {getSortedPostsData} from "@/lib/post";
+import {GetStaticProps} from "next";
+import Link from "next/link";
 
 const inter = Inter({subsets: ['latin']})
 
-export default function Home() {
+
+export const getStaticProps: GetStaticProps = async () => {
+    const allPostsData = getSortedPostsData()
+    return {
+        props: {
+            allPostsData
+        }
+    }
+}
+
+export default function Home({allPostsData}: {
+    allPostsData: {
+        id: string,
+        title: string,
+        date: string
+    }[]
+}) {
     return (
         <HomeContainer>
             <Head>
@@ -19,24 +38,42 @@ export default function Home() {
                     (This is a website)
                 </p>
             </HeadingMd>
-            <HeadingMd padding={1}>
+            <HeadingMd $padding={1}>
                 <HeadingLarge>Blog</HeadingLarge>
                 <List>
-
+                    {allPostsData.map(({id, title, date}) => (
+                        <ListItem key={id}>
+                            <Link href={`/posts/${id}`}>
+                                {title}
+                            </Link>
+                            <br/>
+                            <Date>{date}</Date>
+                        </ListItem>
+                    ))}
                 </List>
             </HeadingMd>
         </HomeContainer>
     )
 }
 
+const ListItem = styled.li`
+  margin: 0 0 1.25rem
+`
+
+const Date = styled.small`
+    color: #666;
+`
+
 const HomeContainer = styled.div`
   padding: 0 2rem;
+  max-width: 36rem;
+  margin: 3rem auto;
 `;
 
-const HeadingMd = styled.section<{ padding?: number }>`
+const HeadingMd = styled.section<{ $padding?: number }>`
   font-size: 1.2rem;
   line-height: 1.5;
-  padding: ${(props) => props.padding ? `${props.padding}px` : 0};
+  padding: ${(props) => props.$padding ? `${props.$padding}px` : 0};
 `
 
 const HeadingLarge = styled.h2`
