@@ -1,6 +1,8 @@
 import React from 'react';
+import Link from "next/link";
+import CreatePost from "@/app/posts/CreatePost";
 
-interface PostProps {
+export interface PostProps {
     id: string
     title: string
     created: string
@@ -17,21 +19,28 @@ export default async function PostsPage() {
             {posts?.map((post) => {
                 return <PostItem key={post.id} post={post}/>
             })}
+
+            <CreatePost />
         </div>
     );
 }
 
-export const PostItem = ({post}) => {
+export function PostItem({post} : {post: PostProps}) {
 
     return(
-        <div>
-
-        </div>
+        <Link href={`/posts/${post.id}`}>
+            <div>
+                <h3>{post.title}</h3>
+                <p>{post.created}</p>
+            </div>
+        </Link>
     )
 }
 
 async function getPosts() {
-    const res = await fetch('http://127.0.0.1:8090/api/collections/users/records')
+    const res = await fetch('http://127.0.0.1:8090/api/collections/posts/records', {
+        cache: 'no-store'
+    })
     const data = await res.json()
     return data?.items as PostProps[]
 }
