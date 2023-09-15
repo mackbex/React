@@ -4,20 +4,22 @@ import './index.css';
 import App from './App';
 import {createStore} from "redux";
 import counter from "./reducers";
+import rootReducer from "./reducers";
+import {CounterActionType} from "./reducers/counter";
+import {TodoActionType} from "./reducers/todos";
+import {Provider} from "react-redux";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const store = createStore(counter)
+const store = createStore(rootReducer)
 
 const render = () => root.render(
-    <App
-    value={store.getState()}
-    onIncrement={() => store.dispatch({type: 'INCREMENT'})}
-    onDecrement={() => store.dispatch({type: 'DECREMENT'})}
-    />
+
+    <Provider store={store}>
+        <App />
+    </Provider>
 );
 render()
 store.subscribe(render)
-
