@@ -1,11 +1,12 @@
 'use client'
-import React, {useState} from 'react';
+import React, {startTransition, useState, useTransition} from 'react';
 import {router} from "next/client";
 import {useRouter} from "next/navigation";
 
 export default function CreatePost() {
 
     const [title, setTitle] = useState<string>('')
+    const [isPending, startTransition] = useTransition()
 
     const router = useRouter()
 
@@ -20,7 +21,9 @@ export default function CreatePost() {
             })
         })
 
-        setTitle('')
+        startTransition(() => {
+            setTitle('')
+        })
         router.refresh()
     }
 
@@ -28,6 +31,7 @@ export default function CreatePost() {
 
     return (
         <form onSubmit={handleSubmit}>
+            {isPending && <div />}
             <input
                 type={"text"}
                 placeholder={"Title"}
