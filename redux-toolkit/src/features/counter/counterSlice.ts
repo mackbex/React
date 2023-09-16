@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../../app/store';
 import { fetchCount } from './counterAPI';
+import axios from "axios";
 
 export interface CounterState {
   value: number;
@@ -26,17 +27,48 @@ export const incrementAsync = createAsyncThunk(
   }
 );
 
+export const fetchUsesAsync = createAsyncThunk(
+  'counter/fetchUsers',
+  async (_, {signal}) => {
+
+    const controller = new AbortController()
+    signal.addEventListener('abort', () => {
+      controller.abort()
+    })
+    const response = await axios.get('https://jsonplaceholder.typicode.com/users', {
+      signal: controller.signal
+    })
+    return response.data
+  }
+)
+
+export function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 export const counterSlice = createSlice({
   name: 'counter',
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
+
+    //   reducer: (state, action: PayloadAction<CounterState>) => {
+    //     // Redux Toolkit allows us to write "mutating" logic in reducers. It
+    //     // doesn't actually mutate the state because it uses the Immer library,
+    //     // which detects changes to a "draft state" and produces a brand new
+    //     // immutable state based off those changes
+    //
+    //     state.value += 1 + action.payload.value;
+    //   },
+    //   prepare: (amount:CounterState = initialState) => {
+    //     return {payload: {
+    //         value: amount.value + 10,
+    //         status: "idle"
+    //       } as CounterState}
+    //   }
+    // },
     increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
+      state.value += 1
     },
     decrement: (state) => {
       state.value -= 1;
@@ -59,7 +91,8 @@ export const counterSlice = createSlice({
       })
       .addCase(incrementAsync.rejected, (state) => {
         state.status = 'failed';
-      });
+
+      })
   },
 });
 
