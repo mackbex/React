@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import {useDispatch, useSelector, useStore} from "react-redux";
-import {RootState} from "./reducers";
+import {useDispatch, useSelector} from "react-redux";
+import {AppThunkDispatch, RootState} from "./reducers";
 import {TodoActionType} from "./reducers/todos";
 import {CounterActionType} from "./reducers/counter";
+import fetchPosts from "./actions/posts";
 
 type Props = {
   value: number;
@@ -12,11 +13,16 @@ type Props = {
 }
 
 function App() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppThunkDispatch>()
   const counter = useSelector((state: RootState) => state.counter)
   const todos = useSelector((state: RootState) => state.todos)
+  const posts = useSelector((state: RootState) => state.posts)
 
   const [todoValue, setTodoValue] = useState("")
+
+  useEffect(() => {
+  dispatch(fetchPosts())
+  }, [dispatch]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodoValue(e.target.value)
@@ -54,6 +60,10 @@ function App() {
         <input type={"text"} value={todoValue} onChange={handleChange}/>
         <input type={"submit"} />
       </form>
+
+      <ul>
+        {posts.map((post, index) => <li key={index}>{post.title}</li>)}
+      </ul>
     </div>
   );
 }
