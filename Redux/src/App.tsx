@@ -36,7 +36,7 @@ function App() {
   }
 
   const onDecrement = () => {
-    dispatch({type: CounterActionType.INCREMENT})
+    dispatch({type: CounterActionType.DECREMENT})
   }
 
   return (
